@@ -23,6 +23,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Camera cam = null;
     [SerializeField] private GameObject player = null;
 
+    //Player Variables
+    [SerializeField, Range(0, 10)] private int health;
+    [SerializeField, Range(0, 5)] private int damage;
+
     //Movement Serialised Variables
     [SerializeField] private float moveSpeed = 1;
     [SerializeField] private float moveSmoothing = 25;
@@ -69,9 +73,9 @@ public class CameraController : MonoBehaviour
     private float downMax = 2f;
     private float pivotAngle = 0;
     private float rootAngle = 90;
-    private float zoom = 2;
-    private float zoomMax = 2f;
-    private float zoomMin = 1f;
+    private float zoom = 3;
+    private float zoomMax = 3f;
+    private float zoomMin = 2f;
     private float zoomSpeedDifference = 0;
     private float startMoveSpeed = 0;
 
@@ -370,6 +374,21 @@ public class CameraController : MonoBehaviour
         if (!isPlayerClicked) return;
         SpawningManager.Singleton.InstantiateBullet();
         
+    }
+
+    public void PlayerTookDamage(int damage)
+    {
+        health -= damage;
+    }
+
+    public int GetPlayerDamage()
+    {
+        return damage;
+    }
+
+    public int GetPlayerHealth()
+    {
+        return health;
     }
 
 }

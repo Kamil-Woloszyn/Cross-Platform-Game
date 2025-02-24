@@ -7,6 +7,8 @@ TagManager:
   - BulletHolder
   - EnemyHolder
   - Enemy
+  - Projectile
+  - Boss
   layers:
   - Default
   - TransparentFX

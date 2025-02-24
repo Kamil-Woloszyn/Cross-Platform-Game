@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
@@ -8,10 +9,7 @@ using UnityEngine;
 public class SpawningManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject bullet = null;
-
-    [SerializeField]
-    private GameObject bossEnemy = null;
+    private List<GameObject> bullets = new List<GameObject>();
 
     [SerializeField]
     private List<GameObject> enemies = new List<GameObject>();
@@ -21,6 +19,9 @@ public class SpawningManager : MonoBehaviour
 
     [SerializeField]
     private Transform enemySpawnPoint = null;
+
+    [SerializeField]
+    private GameObject player = null;
 
     [SerializeField]
     private float bulletSpeed = 0f;
@@ -50,7 +51,7 @@ public class SpawningManager : MonoBehaviour
         
     }
     public Enemies listOfEnemies;
-        
+    
    
     private static SpawningManager instance = null;
 
@@ -80,95 +81,154 @@ public class SpawningManager : MonoBehaviour
     private void Start()
     {
         listOfEnemies = new Enemies();
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>().MoveRotation(90);
     }
     private void Update()
     {
-        if(bossSpawned)
+        if (UI_Navigator.Singleton.GetCurrentTab() == UI_Tabs.GAME)
         {
-            if(bossHealth <= 0)
+            if (bossSpawned)
             {
-                bossSpawned = false;
+                var boss = GameObject.FindGameObjectWithTag("Boss") as GameObject;
+                if(boss.transform.position.x < 2.1f)
+                {
+                    boss.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                    boss.GetComponent<Enemy>().enemyType.UpdateShootingAbility();
+                }
+            }
+            else
+            {
+                time += Time.deltaTime;
+                if (time >= enemySpawningCooldown)
+                {
+
+                    InstantiateEnemy();
+                    time = 0f;
+                    enemiesSpawnedSinceStart++;
+                    totalEnemiesSpawned++;
+                }
+                else if (enemiesSpawnedSinceStart >= 10)
+                {
+                    enemySpawningCooldown -= (enemySpawningCooldown / 100) * 10;
+                    enemiesSpawnedSinceStart = 0;
+                    //InstantiateBoss();
+                }
+                else if (GameManager.Singleton.GetEnemiesKilledByPlayer() % 10 == 0 && GameManager.Singleton.GetEnemiesKilledByPlayer() != 0)
+                {
+                    DestroyAllEnemies();
+                    InstantiateBoss();
+                    bossSpawned = true;
+                }
+            }
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                if (enemy.GetComponent<Enemy>().enemyType.enemyType == "SHOOTING")
+                {
+                    if (enemy.transform.position.x < 2.1f)
+                    {
+                        enemy.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                        enemy.GetComponent<Enemy>().enemyType.UpdateShootingAbility();
+
+                    }
+                }
 
             }
         }
-        else
-        {
-            time += Time.deltaTime;
-            if (time >= enemySpawningCooldown)
-            {
-                
-                InstantiateEnemy();
-                time = 0f;
-                enemiesSpawnedSinceStart++;
-                totalEnemiesSpawned++;
-            }
-            else if (enemiesSpawnedSinceStart >= 10)
-            {
-                enemySpawningCooldown -= (enemySpawningCooldown / 100) * 10;
-                enemiesSpawnedSinceStart = 0;
-                //InstantiateBoss();
-            }
-            else if(totalEnemiesSpawned % 50 == 0)
-            {
-                InstantiateBoss();
-                bossSpawned = true;
-            }
-        }
-        foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
-        {
-            if(enemy.transform.position.x < 2.1f)
-            {
-                Debug.Log("Updating Enemy Velocity");
-                enemy.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-                
-                foreach (Enemy.EnemyTypes enemys in listOfEnemies.enemyList)
-                {
-                    if(enemy.gameObject.Equals(enemys.enemyPrefab) && enemys.enemyType.Equals("SHOOTING"))
-                    {
-                        Destroy(enemys.enemyPrefab);
-                        //listOfEnemies.enemyList.Remove(enemys);
-                    }
-                }
-            }
-        }
-        
         
     }
     public void InstantiateBullet()
     {
-
-        var obj = Instantiate(bullet, playerShootingPoint.position, playerShootingPoint.rotation) as GameObject;
+        
+        var obj = Instantiate(bullets[0], playerShootingPoint.position, playerShootingPoint.rotation) as GameObject;
         obj.GetComponent<Rigidbody2D>().AddForce(new Vector2(bulletSpeed,0f ),ForceMode2D.Impulse);
         var parent = GameObject.FindGameObjectWithTag("BulletHolder");
         obj.transform.SetParent(parent.transform);
     }
+    public void InstantiateEnemyBullet(Transform shootingPoint)
+    {
+        var obj = Instantiate(bullets[1], shootingPoint.position, shootingPoint.rotation) as GameObject;
+        obj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-bulletSpeed, 0f), ForceMode2D.Impulse);
+        obj.GetComponent<Rigidbody2D>().velocity = (GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>().position - obj.GetComponentInParent<Rigidbody2D>().position).normalized;
+        var parent = GameObject.FindGameObjectWithTag("BulletHolder");
+        obj.transform.SetParent(parent.transform);
+    }
+
 
     public void InstantiateEnemy()
     {
-        
+        //Choosing Enemy To Spawn
+        int coinFlip = Random.Range(0, 2);
+        int diceRoll3Sided = Random.Range(0, 2);
+        int diceRoll6Sided = Random.Range(3, 8);
+        var enemyChosen = coinFlip == 1 ? enemies[diceRoll3Sided] as GameObject : enemies[diceRoll6Sided] as GameObject;
         randomSpawnValue = Random.Range(randomSpawnMin, randomSpawnMax);
         int enemyVariantCount = enemyColorVariants.Count;
-        Color selectedVariant = enemyColorVariants[Random.Range(0,enemyVariantCount)];
-        Quaternion rotation = new Quaternion(0,0,125,0);
-        var obj = Instantiate(enemies[0], enemySpawnPoint.position + new Vector3(5, randomSpawnValue), rotation);
-        obj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1,0),ForceMode2D.Impulse);
+        Color selectedVariant = enemyColorVariants[Random.Range(0, enemyVariantCount)];
+        var obj = Instantiate(enemyChosen, enemySpawnPoint.position + new Vector3(5, randomSpawnValue), Quaternion.identity);
+        obj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1, 0), ForceMode2D.Impulse);
         obj.GetComponent<SpriteRenderer>().material.color = selectedVariant;
-        obj.gameObject.transform.rotation = rotation;
-        Enemy.EnemyTypes enemy = new Enemy.EnemyTypes("SHOOTING", obj, new Enemy.EnemyData());
-        listOfEnemies.enemyList.Add(enemy);
-        //var parent = GameObject.FindGameObjectWithTag("EnemyHolder");
-        //obj.transform.SetParent(parent.transform);
+        if (coinFlip == 1)
+        {
+            Enemy.EnemyTypes enemy = new Enemy.EnemyTypes("SHOOTING", obj, new Enemy.EnemyData());
+            listOfEnemies.enemyList.Add(enemy);
+            obj.GetComponent<Enemy>().AssignEnemyTypeData(enemy);
+            obj.transform.rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+        {
+            if(diceRoll6Sided < 6)
+            {
+                Enemy.EnemyTypes enemy = new Enemy.EnemyTypes("HAZARDS", obj, new Enemy.EnemyData());
+                listOfEnemies.enemyList.Add(enemy);
+                obj.GetComponent<Enemy>().AssignEnemyTypeData(enemy);
+            }
+            else if (diceRoll6Sided < 9)
+            {
+                Enemy.EnemyTypes enemy = new Enemy.EnemyTypes("DEBRIES", obj, new Enemy.EnemyData());
+                listOfEnemies.enemyList.Add(enemy);
+                obj.GetComponent<Enemy>().AssignEnemyTypeData(enemy);
+            }
+        }
+        
+        
+        
+        
+        var parent = GameObject.FindGameObjectWithTag("EnemyHolder");
+        obj.transform.SetParent(parent.transform);
     }
 
     public void InstantiateBoss()
     {
-        randomSpawnValue = Random.Range(randomSpawnMin, randomSpawnMax);
-        var obj = Instantiate(bossEnemy,enemySpawnPoint.position + new Vector3(0,randomSpawnValue),enemySpawnPoint.rotation);
+        var bossChosen = enemies[Random.Range(9, 11)] as GameObject;
+        var obj = Instantiate(bossChosen, enemySpawnPoint.position,enemySpawnPoint.rotation);
         obj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-1, 0), ForceMode2D.Impulse);
+        Enemy.EnemyTypes enemy = new Enemy.EnemyTypes("BOSS", obj, new Enemy.EnemyData());
+        listOfEnemies.enemyList.Add(enemy);
+        obj.GetComponent<Enemy>().AssignEnemyTypeData(enemy);
+        obj.transform.rotation = Quaternion.Euler(0, 0, 90);
+
+        bossHealth = enemy.data.health;
         var parent = GameObject.FindGameObjectWithTag("EnemyHolder");
         obj.transform.SetParent(parent.transform);
         spawnedBoss = obj;
-        bossHealth = 10;
     }
 
+    public void RemoveEnemyFromList(Enemy.EnemyTypes enemyType)
+    {
+        listOfEnemies.enemyList.Remove(enemyType);
+    }
+
+    public void BossDied()
+    {
+        bossSpawned = false;
+    }
+
+    public void DestroyAllEnemies()
+    {
+        List<GameObject> enemiesToDestroy = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+        foreach(GameObject enemy in enemiesToDestroy)
+        {
+            enemy.GetComponent<Enemy>().DeconstructEnemy();
+        }
+    }
 }

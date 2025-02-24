@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public float timeLeftBeforeDespawn = 5f;
     public struct BulletData
     {
         public void InitializeBulletData(string type, GameObject obj)
@@ -24,22 +25,35 @@ public class Bullet : MonoBehaviour
         public GameObject bulletPrefab;
     }
 
+    private void Update()
+    {
+        if (UI_Navigator.Singleton.GetCurrentTab() != UI_Tabs.GAME) return;
+        
+        timeLeftBeforeDespawn -= Time.deltaTime;
+        if(timeLeftBeforeDespawn < 0)
+        {
+            Destroy(gameObject);
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Collision Entered");
         if (collision.gameObject.tag.Equals("Enemy"))
         {
-            foreach(Enemy.EnemyTypes enemy in SpawningManager.Singleton.listOfEnemies.enemyList.ToList())
-            {
-                if(enemy.enemyPrefab.Equals(collision.gameObject))
-                {
-                    SpawningManager.Singleton.listOfEnemies.enemyList.Remove(enemy);
-                    Destroy(collision.gameObject);
-                    Destroy(gameObject);
-                }
-            }
+            collision.gameObject.GetComponent<Enemy>().DamageTaken(CameraController.Singleton.GetPlayerDamage());
+            Destroy(gameObject);
         }
-        else
+        else if (collision.gameObject.tag.Equals("Boss"))
+        {
+            collision.gameObject.GetComponent<Enemy>().BossDamageTaken(CameraController.Singleton.GetPlayerDamage());
+            Destroy(gameObject);
+        }
+        else if (collision.gameObject.tag.Equals("Player"))
+        {
+            GameManager.Singleton.PlayerTookDamage();
+            Destroy(gameObject);
+        }
+        else 
         {
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             if (bullet != null)
