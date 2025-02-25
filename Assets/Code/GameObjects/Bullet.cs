@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+/// <summary>
+/// The class Bullet is made for projectiles that are fired out of either the enemy or the player
+/// </summary>
 public class Bullet : MonoBehaviour
 {
+    
     public float timeLeftBeforeDespawn = 5f;
+
+    /// <summary>
+    /// Public struct that holds the data of the bullet that is spawned, it holds data on who shot the bullet and the prefab of the bullet which was fired
+    /// </summary>
     public struct BulletData
     {
         public void InitializeBulletData(string type, GameObject obj)
@@ -37,6 +44,7 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //Checking on who or what was hit by the bullet checking if the bullet hit an enemy, boss, player or if two bullets collided together.
         Debug.Log("Collision Entered");
         if (collision.gameObject.tag.Equals("Enemy"))
         {

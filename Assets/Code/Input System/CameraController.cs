@@ -68,9 +68,9 @@ public class CameraController : MonoBehaviour
 
     //Default Variables
     private float rightMax = 0f;
-    private float leftMax = 4f;
-    private float upMax = 2f;
-    private float downMax = 2f;
+    private float leftMax = 7f;
+    private float upMax = 2.5f;
+    private float downMax = 2.5f;
     private float pivotAngle = 0;
     private float rootAngle = 90;
     private float zoom = 3;

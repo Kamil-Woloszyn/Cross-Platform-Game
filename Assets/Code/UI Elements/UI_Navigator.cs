@@ -29,8 +29,11 @@ public class UI_Navigator : MonoBehaviour
     [SerializeField]
     private Button exitPauseButton = null;
 
+    //current tab opened in the game as a global variable
+    [SerializeField]
+    UI_Tabs currentTab;
 
-
+    //Instance of the Singleton class of this class
     private static UI_Navigator instance = null;
 
     public static UI_Navigator Singleton
@@ -52,8 +55,7 @@ public class UI_Navigator : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    [SerializeField]
-    UI_Tabs currentTab;
+    
     private void Start()
     {
         currentTab = UI_Tabs.GAME;
@@ -62,6 +64,10 @@ public class UI_Navigator : MonoBehaviour
         exitPauseButton.onClick.AddListener(ResumeGame);
     }
 
+    /// <summary>
+    /// Class which lets UI to be switched to a different ui element inside the game
+    /// </summary>
+    /// <param name="tab"></param>
     public void UI_GOTO(UI_Tabs tab)
     {
         CloseAllUI();
@@ -89,6 +95,9 @@ public class UI_Navigator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function to close all of the UI elements
+    /// </summary>
     public void CloseAllUI()
     {
         shopElements.SetActive(false);
@@ -99,16 +108,26 @@ public class UI_Navigator : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Function for going to main menu ui to use for buttons
+    /// </summary>
     public void GoToMainMenu()
     {
         UI_GOTO(UI_Tabs.MAIN_MENU);
     }
 
+    /// <summary>
+    /// Function for setting the games state to go back to the game state with the click/tap of a button
+    /// </summary>
     public void ResumeGame()
     {
         UI_GOTO(UI_Tabs.GAME);
     }
 
+    /// <summary>
+    /// Function to access the current tab avaible inside of this class as a global varaible
+    /// </summary>
+    /// <returns></returns>
     public UI_Tabs GetCurrentTab()
     {
         return currentTab;

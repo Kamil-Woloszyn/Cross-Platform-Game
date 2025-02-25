@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
+/// <summary>
+/// Class of GameManager which overlooks the mechanisms of the game 
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -40,6 +42,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //Checking if the game ui is currently in a specific screen, and incase the user is in that ui then check if a keyboard key is pressed
         if(UI_Navigator.Singleton.GetCurrentTab() == UI_Tabs.GAME)
         {
             if(Input.GetKeyDown(KeyCode.Escape))
@@ -68,37 +71,55 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //Updating player hud text field
         UpdatePlayerHud();
+        //Updating the variables for highscores achieved by the player
         UpdateHighScore();
     }
+
+    /// <summary>
+    /// Function for behaviour of dictating of what happens when the boss dies inside of the game
+    /// </summary>
     public void BossDied()
     {
         SpawningManager.Singleton.BossDied();
         currentLevel += 1;
     }
 
+    /// <summary>
+    /// Function for behaviour of what happens when the player dies. It goes to the game over screen.
+    /// </summary>
     public void PlayerDied()
     {
         UI_Navigator.Singleton.UI_GOTO(UI_Tabs.GAME_OVER);
     }
 
+    /// <summary>
+    /// Function which dictates what happens when the player recieves damage done by anything.
+    /// </summary>
     public void PlayerTookDamage()
     {
         playerHealth -= 1;
         //Lowering total score as a punishment for taking damage
-        currentScore /= 2;
-
         if(playerHealth <= 0)
         {
             PlayerDied();
         }
     }   
 
+
+    /// <summary>
+    /// Function which adds a set amount of score to the total score inside of the game score quantity.
+    /// </summary>
+    /// <param name="score"></param>
     public void AddScore(int score)
     {
         currentScore += score;
     }
 
+    /// <summary>
+    /// Function which updates the variables inside of the text hud.
+    /// </summary>
     public void UpdatePlayerHud()
     {
         if (UI_Navigator.Singleton.GetCurrentTab() == UI_Tabs.GAME)
@@ -108,16 +129,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Getter for variable 'enemiesKilled'
+    /// </summary>
+    /// <returns></returns>
     public int GetEnemiesKilledByPlayer()
     {
         return enemiesKilled;
     }
 
+    /// <summary>
+    /// Function which adds score if an enemy is hurt 
+    /// </summary>
     public void EnemyHurt()
     {
         AddScore(Random.Range(400,500));
     }
 
+    /// <summary>
+    /// Function which updates high score variable for the player currently playing
+    /// </summary>
     public void UpdateHighScore()
     {
         if (PlayerPrefs.GetInt("Highscore") < currentScore)
@@ -128,6 +159,9 @@ public class GameManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Function which increases variable 'enemiesKilled'
+    /// </summary>
     public void EnemyKilled()
     {
         enemiesKilled += 1;

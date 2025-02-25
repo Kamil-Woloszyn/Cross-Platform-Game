@@ -38,10 +38,11 @@ public class SpawningManager : MonoBehaviour
     private int totalEnemiesSpawned = 1;
     private bool bossSpawned = false;
     private float randomSpawnValue = 0f;
-    private float randomSpawnMax = 3f;
-    private float randomSpawnMin = -3f;
+    private float randomSpawnMax = 2f;
+    private float randomSpawnMin = -2f;
     private GameObject spawnedBoss = null;
     private int bossHealth = 0;
+    private int enemiesNeededForNextBoss = 10;
 
     
 
@@ -90,7 +91,7 @@ public class SpawningManager : MonoBehaviour
             if (bossSpawned)
             {
                 var boss = GameObject.FindGameObjectWithTag("Boss") as GameObject;
-                if(boss.transform.position.x < 2.1f)
+                if(boss.transform.position.x < 2.6f)
                 {
                     boss.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
                     boss.GetComponent<Enemy>().enemyType.UpdateShootingAbility();
@@ -107,13 +108,7 @@ public class SpawningManager : MonoBehaviour
                     enemiesSpawnedSinceStart++;
                     totalEnemiesSpawned++;
                 }
-                else if (enemiesSpawnedSinceStart >= 10)
-                {
-                    enemySpawningCooldown -= (enemySpawningCooldown / 100) * 10;
-                    enemiesSpawnedSinceStart = 0;
-                    //InstantiateBoss();
-                }
-                else if (GameManager.Singleton.GetEnemiesKilledByPlayer() % 10 == 0 && GameManager.Singleton.GetEnemiesKilledByPlayer() != 0)
+                else if (GameManager.Singleton.GetEnemiesKilledByPlayer() % enemiesNeededForNextBoss == 0 && GameManager.Singleton.GetEnemiesKilledByPlayer() != 0)
                 {
                     DestroyAllEnemies();
                     InstantiateBoss();
@@ -211,6 +206,9 @@ public class SpawningManager : MonoBehaviour
         var parent = GameObject.FindGameObjectWithTag("EnemyHolder");
         obj.transform.SetParent(parent.transform);
         spawnedBoss = obj;
+
+        enemySpawningCooldown -= (enemySpawningCooldown / 10) * 2;
+        enemiesNeededForNextBoss *= 2;
     }
 
     public void RemoveEnemyFromList(Enemy.EnemyTypes enemyType)

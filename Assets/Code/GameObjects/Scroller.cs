@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class Scroller : MonoBehaviour
 {
+    /// <summary>
+    /// Class scroller made for creating background parallax effect
+    /// </summary>
+    //Private Global Variables & Public Global Variables
     private float length, startpos;
     public GameObject parallaxReferencePoint;
     public float parallaxEffect;
@@ -22,11 +26,11 @@ public class Scroller : MonoBehaviour
         float dist = (parallaxReferencePoint.transform.position.x *  parallaxEffect);
         transform.position = new Vector3(startpos + dist, transform.position.y, transform.position.z);
 
-        if(temp > startpos + length)
+        if(temp >= startpos + length)
         {
             startpos += length;
         }
-        else if(temp < startpos - length)
+        else if(temp <= startpos - length)
         {
             startpos -= length;
         }

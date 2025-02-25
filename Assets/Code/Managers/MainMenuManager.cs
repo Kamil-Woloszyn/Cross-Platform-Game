@@ -27,5 +27,5 @@ public class MainMenuManager : MonoBehaviour
         }
         */
         instance = this;
-    }
+    }       
 }
