@@ -6,6 +6,9 @@ using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 
+/// <summary>
+/// Class for over looking the spawning of enemies and other things that require spawning in the game
+/// </summary>
 public class SpawningManager : MonoBehaviour
 {
     [SerializeField]
@@ -45,7 +48,9 @@ public class SpawningManager : MonoBehaviour
     private int enemiesNeededForNextBoss = 10;
 
     
-
+    /// <summary>
+    /// Class for saving a list of cariables
+    /// </summary>
     public class Enemies
     {
         public List<Enemy.EnemyTypes> enemyList = new List<Enemy.EnemyTypes>();
@@ -131,6 +136,10 @@ public class SpawningManager : MonoBehaviour
         }
         
     }
+
+    /// <summary>
+    /// Function to spawn a bullet prefab coming from the player
+    /// </summary>
     public void InstantiateBullet()
     {
         
@@ -139,6 +148,11 @@ public class SpawningManager : MonoBehaviour
         var parent = GameObject.FindGameObjectWithTag("BulletHolder");
         obj.transform.SetParent(parent.transform);
     }
+
+    /// <summary>
+    /// Function to spawn a bullet prefab coming from the enemies
+    /// </summary>
+    /// <param name="shootingPoint"></param>
     public void InstantiateEnemyBullet(Transform shootingPoint)
     {
         var obj = Instantiate(bullets[1], shootingPoint.position, shootingPoint.rotation) as GameObject;
@@ -148,7 +162,9 @@ public class SpawningManager : MonoBehaviour
         obj.transform.SetParent(parent.transform);
     }
 
-
+    /// <summary>
+    /// Function to spawn a random enemy
+    /// </summary>
     public void InstantiateEnemy()
     {
         //Choosing Enemy To Spawn
@@ -192,6 +208,9 @@ public class SpawningManager : MonoBehaviour
         obj.transform.SetParent(parent.transform);
     }
 
+    /// <summary>
+    /// Function to spawn a random boss
+    /// </summary>
     public void InstantiateBoss()
     {
         var bossChosen = enemies[Random.Range(9, 11)] as GameObject;
@@ -211,16 +230,26 @@ public class SpawningManager : MonoBehaviour
         enemiesNeededForNextBoss *= 2;
     }
 
+    /// <summary>
+    /// Function to remove the enemyType passed in from the list held in this class
+    /// </summary>
+    /// <param name="enemyType"></param>
     public void RemoveEnemyFromList(Enemy.EnemyTypes enemyType)
     {
         listOfEnemies.enemyList.Remove(enemyType);
     }
 
+    /// <summary>
+    /// Function for changing the bossSpawned boolean to false
+    /// </summary>
     public void BossDied()
     {
         bossSpawned = false;
     }
 
+    /// <summary>
+    /// Function to destroy all of the enemies inside of the list of enemy objects and then clear any objects spawned
+    /// </summary>
     public void DestroyAllEnemies()
     {
         List<GameObject> enemiesToDestroy = GameObject.FindGameObjectsWithTag("Enemy").ToList();

@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class for navigating through the different ingame ui elements
+/// </summary>
 public class UI_Navigator : MonoBehaviour
 {
     //UI ELEMENTS

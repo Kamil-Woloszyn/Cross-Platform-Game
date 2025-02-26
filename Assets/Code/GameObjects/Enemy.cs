@@ -4,12 +4,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Public class of enemy to be placed onto enemies spawned inside of the game.
+/// </summary>
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
     public Transform enemyShootingPoint;
     private float timeSinceLastShot = 0f;
     private float timeToDespawn = 10f;
+
+    /// <summary>
+    /// EnemyData public class to store information on enemies
+    /// </summary>
     public class EnemyData
     {
         public void InitializeHealth(int maxHealth)
@@ -38,6 +45,10 @@ public class Enemy : MonoBehaviour
         public bool startShooting;
 
     }
+
+    /// <summary>
+    /// Public class used to store vitial information about enemies and dictate their behaviour depending on what type of enemy they are
+    /// </summary>
     public class EnemyTypes
     {
         public EnemyTypes(string enemyType, GameObject prefab, EnemyData enemyData)
@@ -117,18 +128,29 @@ public class Enemy : MonoBehaviour
         }
         
     }
+    
+    /// <summary>
+    /// Public function to assign enemy type data to the current enemy from the spawning script
+    /// </summary>
+    /// <param name="enemyType"></param>
     public void AssignEnemyTypeData(EnemyTypes enemyType)
     {
         this.enemyType = enemyType;
         health = enemyType.data.health;
     }
 
+    /// <summary>
+    /// Function to deconstruct enemies by first removing them from saved list of enemies and then destroying its gameobject.
+    /// </summary>
     public void DeconstructEnemy()
     {
         SpawningManager.Singleton.RemoveEnemyFromList(enemyType);
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Function to deconstruct bosses it works by first removing them from saved list of enemies and then destroying its gameobject.
+    /// </summary>
     public void DeconstructBoss()
     {
         SpawningManager.Singleton.RemoveEnemyFromList(enemyType);
@@ -136,6 +158,10 @@ public class Enemy : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Function for ehaviour regarding taking damage
+    /// </summary>
+    /// <param name="currentPlayerDamage"></param>
     public void DamageTaken(int currentPlayerDamage)
     {
         health -= currentPlayerDamage;
@@ -147,6 +173,10 @@ public class Enemy : MonoBehaviour
         GameManager.Singleton.EnemyHurt();
     }
 
+    /// <summary>
+    /// Function for behaviour of a boss taking damange
+    /// </summary>
+    /// <param name="currentPlayerDamage"></param>
     public void BossDamageTaken(int currentPlayerDamage)
     {
         health -= currentPlayerDamage;
@@ -159,6 +189,10 @@ public class Enemy : MonoBehaviour
         GameManager.Singleton.EnemyHurt();
     }
 
+    /// <summary>
+    /// Collisiion behaviour adding for enemies
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag.Equals("Player") && (enemyType.enemyType.Equals("HAZARDS") || enemyType.enemyType.Equals("DEBRIES"))) 
