@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="UI_Navigator" Collapsed="true">
+    <Position X="15.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACIAQAEQAAggUAAIAADCAAEAAAAAEgAAAEA=</HashCode>
+      <FileName>Assets\Code\UI Elements\UI_Navigator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bullet" Collapsed="true">
+    <Position X="11" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="Bullet.BulletData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Code\GameObjects\Bullet.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Code\GameObjects\Bullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy" Collapsed="true">
+    <Position X="13.25" Y="5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="Enemy.EnemyData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Code\GameObjects\Enemy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Enemy.EnemyTypes" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Code\GameObjects\Enemy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAACACgAAABBAAAAAAACAAGAAAAAAQAAAAAAAAAg=</HashCode>
+      <FileName>Assets\Code\GameObjects\Enemy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scroller" Collapsed="true">
+    <Position X="15.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAiAAAAAAAEAAAEAAAAAAAAAAAAAAAAAAIAI=</HashCode>
+      <FileName>Assets\Code\GameObjects\Scroller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraController" Collapsed="true">
+    <Position X="11" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIRBFADAmCYAgQACIQAAAxoACCBIABGZAAABIEdEaGg=</HashCode>
+      <FileName>Assets\Code\Input System\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ggQAACiAAAAAgAAiAAAIAAAIAABAAAEBBAAAAAAAAEQ=</HashCode>
+      <FileName>Assets\Code\Managers\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpawningManager" Collapsed="true">
+    <Position X="15.5" Y="5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="SpawningManager.Enemies" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Code\Managers\SpawningManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQBAAgRAaAAgABAIAEAQAQAAABIAAEhJQCgQEAAAEE=</HashCode>
+      <FileName>Assets\Code\Managers\SpawningManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainMenuManager" Collapsed="true">
+    <Position X="13.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAEAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Code\Managers\MainMenuManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_MainMenu" Collapsed="true">
+    <Position X="13.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAEAAAIAAAAABoAABCABMAAAAAAAkAAMA=</HashCode>
+      <FileName>Assets\Code\UI Elements\UI_MainMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="@InputControls" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="0.75" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="@InputControls.MainActions" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Code\Input System\Input Controls.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Interface Name="@InputControls.IMainActions" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Code\Input System\Input Controls.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Interface>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAKAAACQCAAAJAAwAEAKJABAACAAGAFAAAgAABQAAA=</HashCode>
+      <FileName>Assets\Code\Input System\Input Controls.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UnityEngine.MonoBehaviour" Collapsed="true">
+    <Position X="13.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Enum Name="UI_STATE" Collapsed="true">
+    <Position X="19.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Code\Enums\UI_States.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UI_Tabs" Collapsed="true">
+    <Position X="19.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACgAAAAAAAAAAgAAAAAAgQAAAAAAA=</HashCode>
+      <FileName>Assets\Code\Enums\UI_Tabs.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
