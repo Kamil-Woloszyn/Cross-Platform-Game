@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Projectile
   - Boss
+  - GooglePlaySignInButton
   layers:
   - Default
   - TransparentFX

@@ -1,3 +1,4 @@
+using GameAnalyticsSDK;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -84,6 +85,16 @@ public class UI_MainMenu : MonoBehaviour
     private void OpenInstructions()
     {
         instructionScreenElement.SetActive(true);
+        if (PlayerPrefs.HasKey("FlagInstructionsOpenedBefore"))
+        {
+            PlayerPrefs.SetInt("FlagInstructionsOpenedBefore", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("FlagInstructionsOpenedBefore", 0);
+        }
+        Social.ReportProgress(GPGSIds.achievement_open_instructions, PlayerPrefs.GetInt("FlagInstructionsOpenedBefore") * 100, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+
     }
 
     /// <summary>

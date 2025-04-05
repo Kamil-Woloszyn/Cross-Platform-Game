@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UIElements;
 
 /// <summary>
@@ -144,6 +146,48 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void DeconstructEnemy()
     {
+        ///Checking enemy type
+        if(enemyType.enemyType == "SHOOTING")
+        {
+            if (PlayerPrefs.HasKey("EnemysKilled"))
+            {
+                PlayerPrefs.SetInt("EnemysKilled", PlayerPrefs.GetInt("EnemysKilled") + 1);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("EnemysKilled", 1);
+            }
+            if(PlayerPrefs.GetInt("EnemysKilled") >= 25)
+            {
+                Social.ReportProgress(GPGSIds.achievement_kill_25_enemies, 100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+            }
+            else if (PlayerPrefs.GetInt("EnemysKilled") >= 5)
+            {
+                Social.ReportProgress(GPGSIds.achievement_kill_5_enemies, 100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+            }
+
+        }
+        else if(enemyType.enemyType == "DEBRIES" || enemyType.enemyType == "HAZARDS")
+        {
+            if (PlayerPrefs.HasKey("DebrisDestroyed"))
+            {
+                PlayerPrefs.SetInt("DebrisDestroyed", PlayerPrefs.GetInt("DebrisDestroyed") + 1);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("DebrisDestroyed", 1);
+            }
+            if (PlayerPrefs.GetInt("EnemysKilled") >= 25)
+            {
+                Social.ReportProgress(GPGSIds.achievement_destroy_25_space_debris, 100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+            }
+            else if (PlayerPrefs.GetInt("EnemysKilled") >= 5)
+            {
+                Social.ReportProgress(GPGSIds.achievement_destroy_5_space_derbies,100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+            }
+
+        }
+        PlayerPrefs.Save();
         SpawningManager.Singleton.RemoveEnemyFromList(enemyType);
         Destroy(gameObject);
     }

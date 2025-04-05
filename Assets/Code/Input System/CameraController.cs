@@ -2,6 +2,7 @@
  *  Function:       Camera Movement & Zoom for game
  *  Last Edit Date: 14/03/2024
  */
+using GameAnalyticsSDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -113,6 +114,9 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         Initialise();
+
+        //Set Game Start Flag for Collecting Data
+        ServiceManager.Singleton.SetFlagGameStarted(true);
     }
     private void Initialise()
     {
@@ -245,21 +249,7 @@ public class CameraController : MonoBehaviour
 
         if (isZooming)
         {
-            Vector2 touch0 = inputs.Main.TouchPos0.ReadValue<Vector2>();
-            Vector2 touch1 = inputs.Main.TouchPos1.ReadValue<Vector2>();
-
-            touch0.x /= Screen.width;
-            touch1.x /= Screen.width;
-            touch0.y /= Screen.height;
-            touch1.y /= Screen.height;
-
-            float currentDistance = Vector2.Distance(touch0, touch1);
-            float deltaDistance = currentDistance - zoomBaseDistance;
-            zoom = zoomBaseValue - (deltaDistance * zoomSpeed);
-
-            Vector3 zoomCentre = CameraScreenPositionToPlanePosition(zoomPositionOnScreen);
-            rootTransform.position += (zoomPositionInWorld - zoomCentre);
-
+            UI_Navigator.Singleton.UI_GOTO(UI_Tabs.GAME_PAUSED);
         }
         //If the player is moving the camera
         else if (isMoving)

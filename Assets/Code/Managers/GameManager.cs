@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PlayerDied()
     {
+        ServiceManager.Singleton.SetFlagCollectData(true);
         UI_Navigator.Singleton.UI_GOTO(UI_Tabs.GAME_OVER);
     }
 
@@ -156,6 +157,37 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("Highscore", currentScore);
             PlayerPrefs.Save();
         }
+
+
+        if (PlayerPrefs.HasKey("Highscore"))
+        {
+            PlayerPrefs.SetInt("Highscore", PlayerPrefs.GetInt("Highscore") + 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Highscore", 1);
+        }
+        if(PlayerPrefs.GetInt("DebrisDestroyed") > 5000000)
+        {
+            Social.ReportProgress(GPGSIds.achievement_ascended_toward_radiant_astral_realms,100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+        }
+        else if(PlayerPrefs.GetInt("DebrisDestroyed") > 1000000)
+        {
+            Social.ReportProgress(GPGSIds.achievement_legend, 100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+        }
+        else if (PlayerPrefs.GetInt("DebrisDestroyed") > 250000)
+        {
+            Social.ReportProgress(GPGSIds.achievement_champion,100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+        }
+        else if (PlayerPrefs.GetInt("DebrisDestroyed") > 50000)
+        {
+            Social.ReportProgress(GPGSIds.achievement_strategist,100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+        }
+        else if (PlayerPrefs.GetInt("DebrisDestroyed") > 10000)
+        {
+            Social.ReportProgress(GPGSIds.achievement_rookie,100.0, success => Debug.Log(success ? "Achievement unlocked!" : "Failed to unlock achievement"));
+        }
+        PlayerPrefs.Save();
 
     }
 
